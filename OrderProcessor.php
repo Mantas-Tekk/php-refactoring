@@ -15,7 +15,7 @@ class OrderProcessor {
 
             if($this->isOrderStatusPending($order)) {
                 $total = $this->calculateTotal($order['items']);
-                $finalTotal = $this->applyDiscount($total, $order['customer_type']);
+                $finalTotal = $this->applyDiscounts($total, $order['customer_type']);
                 $this->notifyCustomer($order['customer_email'], $finalTotal);  
             }
         }
@@ -38,7 +38,7 @@ class OrderProcessor {
     }
 
     // Expading function is much easier 
-    private function applyDiscount($total, $customerType) {
+    private function applyDiscounts($total, $customerType) {
         // Applys discount only if thresgold is passed.
         if($total > self::DISCOUNT_THRESHOLD_TOTAL) {
             $total -= $total * self::DISCOUNT_RATE;
@@ -51,7 +51,7 @@ class OrderProcessor {
         return $total;
     }
 
-    // doing changes to  
+    // Doing changes to function does not affect sendEmail 
     private function notifyCustomer($email, $amount) {
         $formattedAmount = number_format($amount, 2);
         $orderMessage = "Your order total: $formattedAmount";
